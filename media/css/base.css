@@ -1,0 +1,90 @@
+/* ---
+   Oliver Beattie Site-wide CSS
+   Base File
+   
+   @author Oliver Beattie
+   @copyright Oliver Beattie 2008
+   
+   The Blueprint CSS framework is also used throughout the site.
+   Credit for which goes to its respective creators.
+   --- */
+
+/* Imports */
+@import url('blueprint/screen.css'); /* Blueprint CSS Framework */
+@import url('blueprint/plugins/fancy-type/screen.css');
+
+/* Global Shit */
+body { background:#fff url('/media/images/backgrounds/grid.png') top left repeat-y; }
+a { color:inherit; text-decoration:underline; }
+a:hover { color:inherit; text-decoration:none; }
+a:active { color:inherit; text-decoration:underline; }
+a.reverse { text-decoration:none; }
+a.reverse:hover { text-decoration:underline; }
+a.reverse:active { text-decoration:none; }
+.block { display:block !important; }
+.plain { padding:0 !important; margin:0 !important; }
+.float-right { float:right !important; }
+.float-left { float:left !important; }
+.right { text-align:right !important; }
+.left { text-align:left !important; }
+.quiet { color:#756f66 !important; font-weight:normal; } /* TODO: De-Mission-Control-ify */
+.loud { font-weight:bold; }
+.error { border-color:#fff !important; } /* TODO: De-Mission-Control-ify */
+.notice { background:#f8e951 !important; border-color:#fff !important; } /* TODO: De-Mission-Control-ify */
+.success { border-color:#fff !important; } /* TODO: De-Mission-Control-ify */
+.emphasis { background-color:#ebebeb !important; } /* TODO: De-Mission-Control-ify */
+.emphasis.bordered { border-top:2px solid #697c81 !important; border-bottom:2px solid #697c81 !important; } /* TODO: De-Mission-Control-ify */
+.inline, .inline * { display:inline !important; margin:0; padding:0; }
+.center, .center * { margin:0 auto; text-align:center; }
+.uppercase { text-transform:uppercase; }
+.lowercase { text-transform:lowercase; }
+
+/* Padding and Spacing */
+.pad-top { padding-top:1em !important; }
+.pad-top-demi { padding-top:.5em !important; }
+.pad-right { padding-right:1em !important; }
+.pad-right-demi { padding-right:.5em !important; }
+.pad-bottom { padding-bottom:1em !important; }
+.pad-bottom-demi { padding-bottom:.5em !important; }
+.pad-left { padding-left:1em !important; }
+.pad-left-demi { padding-left:.5em !important; }
+.pad-all { padding:1em !important; }
+.pad-all-demi { padding:.5em !important; }
+.pad-none { padding:0 !important; }
+.space-top { margin-top:1em !important; }
+.space-top-demi { margin-top:.5em !important; }
+.space-top-large { margin-top:2em !important; }
+.space-right { margin-right:1em !important; }
+.space-right-demi { margin-right:.5em !important; }
+.space-right-large { margin-right:2em !important; }
+.space-bottom { margin-bottom:1em !important; }
+.space-bottom-demi { margin-bottom:.5em !important; }
+.space-bottom-large { margin-bottom:2em !important; }
+.space-left { margin-left:1em !important; }
+.space-left-demi { margin-left:.5em !important; }
+.space-all { margin:1em !important; }
+.space-all-demi { margin:.5em !important; }
+.space-none { margin:0 !important; }
+.lonely {
+    padding-top:0 !important;
+    padding-bottom:0 !important;
+    margin-top:0 !important;
+    margin-bottom:0 !important;
+}
+
+/* General Layout */
+.container {
+    margin:0 0 0 40px;
+}
+
+/* Header */
+#header h1.logo a {
+    width:150px;
+    height:180px;
+    position:absolute;
+    top:0;
+    left:0;
+    display:block;
+    text-indent:-999999px;
+    background:#bc1212 url('/media/images/backgrounds/name.png') bottom center no-repeat;
+}
