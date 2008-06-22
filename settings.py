@@ -73,7 +73,9 @@ TEMPLATE_DIRS = (
 INSTALLED_APPS = (
     # My Apps
     'obeattie.blog',
-    'obeattie.generic',
+    'obeattie.generic.tagging',
+    'obeattie.generic.template_utils',
+    'obeattie.generic.typography',
     'obeattie.links',
     'obeattie.metadata',
     'obeattie.photos',

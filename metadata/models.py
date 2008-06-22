@@ -1,6 +1,31 @@
-from django.contrib.gis.db import models
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
-class PointTestModel(models.Model):
-    point = models.PointField()
+class Category(models.Model):
+    """A category with which objects can associate themselves."""
+    name = models.CharField(max_length=250, blank=False, null=False)
+    slug = models.SlugField(unique=True, blank=True, null=False, prepopulate_from=('name', ))
+    description = models.TextField(blank=False, null=False)
     
-    objects = models.GeoManager()
+    class Admin:
+        search_fields = ('name', 'slug', 'description', )
+        list_display = ('name', 'slug', 'description', )
+    
+    class Meta:
+        verbose_name_plural = _(u'categories')
+    
+    def __unicode___(self):
+        return self.name
+
+class License(models.Model):
+    """A content license."""
+    title = models.CharField(max_length=250, blank=False, null=False)
+    url = models.URLField(blank=True, null=True, verify_exists=False)
+    # Flickr-specific
+    flickr_id = models.IntegerField(blank=True, null=True, editable=False)
+    
+    class Admin:
+        pass
+    
+    def __unicode__(self):
+        return self.title

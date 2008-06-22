@@ -6,8 +6,8 @@ until the ``newforms-admin`` branch lands in trunk.
 from django.core.validators import ValidationError
 from django.utils.translation import ugettext as _
 
-from tagging import settings
-from tagging.utils import parse_tag_input
+from obeattie.generic.tagging import settings
+from obeattie.generic.tagging.utils import parse_tag_input
 
 def isTagList(field_data, all_data):
     """

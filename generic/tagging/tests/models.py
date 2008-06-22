@@ -1,6 +1,6 @@
 from django.db import models
 
-from tagging.fields import TagField
+from obeattie.generic.tagging.fields import TagField
 
 class Perch(models.Model):
     size = models.IntegerField()
@@ -35,4 +35,4 @@ class Article(models.Model):
         ordering = ['name']
 
 class FormTest(models.Model):
-    tags = TagField()
+    tags = TagField('Test', help_text='Test')

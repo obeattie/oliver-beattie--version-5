@@ -6,10 +6,10 @@ from django.db.models.fields import CharField
 from django.dispatch import dispatcher
 from django.utils.translation import ugettext_lazy as _
 
-from tagging import settings
-from tagging.models import Tag
-from tagging.utils import edit_string_for_tags
-from tagging.validators import isTagList
+from obeattie.generic.tagging import settings
+from obeattie.generic.tagging.models import Tag
+from obeattie.generic.tagging.utils import edit_string_for_tags
+from obeattie.generic.tagging.validators import isTagList
 
 class TagField(CharField):
     """
@@ -17,11 +17,11 @@ class TagField(CharField):
     "under the hood". This exposes a space-separated string of tags, but does
     the splitting/reordering/etc. under the hood.
     """
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         kwargs['max_length'] = kwargs.get('max_length', 255)
         kwargs['blank'] = kwargs.get('blank', True)
         kwargs['validator_list'] = [isTagList] + kwargs.get('validator_list', [])
-        super(TagField, self).__init__(**kwargs)
+        super(TagField, self).__init__(*args, **kwargs)
 
     def contribute_to_class(self, cls, name):
         super(TagField, self).contribute_to_class(cls, name)
@@ -104,7 +104,7 @@ class TagField(CharField):
         return 'CharField'
 
     def formfield(self, **kwargs):
-        from tagging import forms
+        from obeattie.generic.tagging import forms
         defaults = {'form_class': forms.TagField}
         defaults.update(kwargs)
         return super(TagField, self).formfield(**defaults)

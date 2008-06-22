@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-r"""
+tests = r"""
 >>> import os
 >>> from django import newforms as forms
->>> from tagging.forms import TagField
->>> from tagging import settings
->>> from tagging.models import Tag, TaggedItem
->>> from tagging.tests.models import Article, Link, Perch, Parrot, FormTest
->>> from tagging.utils import calculate_cloud, get_tag_list, get_tag, parse_tag_input
->>> from tagging.utils import LINEAR
->>> from tagging.validators import isTagList, isTag
+>>> from obeattie.generic.tagging.forms import TagField
+>>> from obeattie.generic.tagging import settings
+>>> from obeattie.generic.tagging.models import Tag, TaggedItem
+>>> from obeattie.generic.tagging.tests.models import Article, Link, Perch, Parrot, FormTest
+>>> from obeattie.generic.tagging.utils import calculate_cloud, get_tag_list, get_tag, parse_tag_input
+>>> from obeattie.generic.tagging.utils import LINEAR
+>>> from obeattie.generic.tagging.validators import isTagList, isTag
 
 #############
 # Utilities #
@@ -323,6 +323,10 @@ u'test5'
 >>> TaggedItem.objects.get_by_model(Parrot, [bar, ter])
 [<Parrot: late>, <Parrot: passed on>]
 
+# Issue 114 - Intersection with non-existant tags
+>>> TaggedItem.objects.get_intersection_by_model(Parrot, [])
+[]
+
 # You can also pass Tag QuerySets
 >>> TaggedItem.objects.get_by_model(Parrot, Tag.objects.filter(name__in=['foo', 'baz']))
 []
@@ -355,6 +359,10 @@ u'test5'
 >>> TaggedItem.objects.get_union_by_model(Parrot, ['bar', 'baz'])
 [<Parrot: late>, <Parrot: passed on>, <Parrot: pining for the fjords>]
 
+# Issue 114 - Union with non-existant tags
+>>> TaggedItem.objects.get_union_by_model(Parrot, [])
+[]
+
 # Retrieving related objects by Model #########################################
 
 # Related instances of the same Model
@@ -371,6 +379,10 @@ u'test5'
 [<Link: link 2>]
 >>> TaggedItem.objects.get_related(l4, Link)
 []
+
+# Limit related items
+>>> TaggedItem.objects.get_related(l1, Link.objects.exclude(name='link 3'))
+[<Link: link 2>]
 
 # Related instance of a different Model
 >>> a1 = Article.objects.create(name='article 1')
@@ -400,7 +412,7 @@ u'test5'
 >>> spaces = Tag.objects.create(name='spa ces')
 >>> comma = Tag.objects.create(name='com,ma')
 
->>> from tagging.utils import edit_string_for_tags
+>>> from obeattie.generic.tagging.utils import edit_string_for_tags
 >>> edit_string_for_tags([plain])
 u'plain'
 >>> edit_string_for_tags([plain, spaces])
@@ -432,3 +444,52 @@ Traceback (most recent call last):
     ...
 ValidationError: [u'Each tag may be no more than 50 characters long.']
 """
+
+tests_pre_qsrf = tests + r"""
+# Limiting results to a queryset
+>>> Tag.objects.usage_for_queryset(Parrot.objects.filter())
+Traceback (most recent call last):
+    ...
+AttributeError: 'TagManager.usage_for_queryset' is not compatible with pre-queryset-refactor versions of Django.
+"""
+
+tests_post_qsrf = tests + r"""
+>>> from django.db.models import Q
+
+# Limiting results to a queryset
+>>> [(tag.name, tag.count) for tag in Tag.objects.usage_for_queryset(Parrot.objects.filter(state='no more'), counts=True)]
+[(u'foo', 1), (u'ter', 1)]
+>>> [(tag.name, tag.count) for tag in Tag.objects.usage_for_queryset(Parrot.objects.filter(state__startswith='p'), counts=True)]
+[(u'bar', 2), (u'baz', 1), (u'foo', 1), (u'ter', 1)]
+>>> [(tag.name, tag.count) for tag in Tag.objects.usage_for_queryset(Parrot.objects.filter(perch__size__gt=4), counts=True)]
+[(u'bar', 2), (u'baz', 1), (u'foo', 1), (u'ter', 1)]
+>>> [(tag.name, tag.count) for tag in Tag.objects.usage_for_queryset(Parrot.objects.filter(perch__smelly=True), counts=True)]
+[(u'bar', 1), (u'foo', 2), (u'ter', 1)]
+>>> [(tag.name, tag.count) for tag in Tag.objects.usage_for_queryset(Parrot.objects.filter(perch__smelly=True), min_count=2)]
+[(u'foo', 2)]
+>>> [(tag.name, hasattr(tag, 'counts')) for tag in Tag.objects.usage_for_queryset(Parrot.objects.filter(perch__size__gt=4))]
+[(u'bar', False), (u'baz', False), (u'foo', False), (u'ter', False)]
+>>> [(tag.name, hasattr(tag, 'counts')) for tag in Tag.objects.usage_for_queryset(Parrot.objects.filter(perch__size__gt=99))]
+[]
+>>> [(tag.name, tag.count) for tag in Tag.objects.usage_for_queryset(Parrot.objects.filter(Q(perch__size__gt=6) | Q(state__startswith='l')), counts=True)]
+[(u'bar', 2), (u'foo', 1), (u'ter', 1)]
+>>> [(tag.name, tag.count) for tag in Tag.objects.usage_for_queryset(Parrot.objects.filter(Q(perch__size__gt=6) | Q(state__startswith='l')), min_count=2)]
+[(u'bar', 2)]
+>>> [(tag.name, hasattr(tag, 'counts')) for tag in Tag.objects.usage_for_queryset(Parrot.objects.filter(Q(perch__size__gt=6) | Q(state__startswith='l')))]
+[(u'bar', False), (u'foo', False), (u'ter', False)]
+>>> [(tag.name, tag.count) for tag in Tag.objects.usage_for_queryset(Parrot.objects.exclude(state='passed on'), counts=True)]
+[(u'bar', 2), (u'foo', 2), (u'ter', 2)]
+>>> [(tag.name, tag.count) for tag in Tag.objects.usage_for_queryset(Parrot.objects.exclude(state__startswith='p'), min_count=2)]
+[(u'ter', 2)]
+>>> [(tag.name, tag.count) for tag in Tag.objects.usage_for_queryset(Parrot.objects.exclude(Q(perch__size__gt=6) | Q(perch__smelly=False)), counts=True)]
+[(u'foo', 1), (u'ter', 1)]
+>>> [(tag.name, tag.count) for tag in Tag.objects.usage_for_queryset(Parrot.objects.exclude(perch__smelly=True).filter(state__startswith='l'), counts=True)]
+[(u'bar', 1), (u'ter', 1)]
+"""
+
+try:
+    from django.db.models.query import parse_lookup
+except ImportError:
+    __test__ = {'post-qsrf': tests_post_qsrf}
+else:
+    __test__ = {'pre-qsrf': tests_pre_qsrf}
