@@ -17,7 +17,8 @@ class TagField(CharField):
     "under the hood". This exposes a space-separated string of tags, but does
     the splitting/reordering/etc. under the hood.
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, tag_model=Tag, *args, **kwargs):
+        self.tag_model = tag_model
         kwargs['max_length'] = kwargs.get('max_length', 255)
         kwargs['blank'] = kwargs.get('blank', True)
         kwargs['validator_list'] = [isTagList] + kwargs.get('validator_list', [])
@@ -53,7 +54,7 @@ class TagField(CharField):
         """
         # Handle access on the model (i.e. Link.tags)
         if instance is None:
-            return edit_string_for_tags(Tag.objects.usage_for_model(owner))
+            return edit_string_for_tags(self.tag_model.objects.usage_for_model(owner))
 
         tags = self._get_instance_tag_cache(instance)
         if tags is None:
@@ -61,7 +62,7 @@ class TagField(CharField):
                 self._set_instance_tag_cache(instance, '')
             else:
                 self._set_instance_tag_cache(
-                    instance, edit_string_for_tags(Tag.objects.get_for_object(instance)))
+                    instance, edit_string_for_tags(self.tag_model.objects.get_for_object(instance)))
         return self._get_instance_tag_cache(instance)
 
     def __set__(self, instance, value):
@@ -80,7 +81,7 @@ class TagField(CharField):
         """
         tags = self._get_instance_tag_cache(instance)
         if tags is not None:
-            Tag.objects.update_tags(instance, tags)
+            self.tag_model.objects.update_tags(instance, tags)
 
     def __delete__(self, instance):
         """
