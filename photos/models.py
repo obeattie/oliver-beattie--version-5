@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 
-from obeattie.generic.tagging.models import Tag as GenericTag, TaggedItem as GenericTaggedItem
+from obeattie.generic.tagging.fields import TagField
+from obeattie.generic.tagging.models import Tag as GenericTag, TagManager as GenericTagManager
 from obeattie.metadata.models import License
 
 class FlickrUser(models.Model):
@@ -26,6 +27,12 @@ class FlickrUser(models.Model):
     
     def __unicode__(self):
         return self.real_name or self.username
+
+class PhotoTag(GenericTag):
+    flickr_id = models.IntegerField('Flickr ID', blank=False, null=False, unique=True, db_index=True)
+    owner = models.ForeignKey(FlickrUser, blank=False, null=False)
+    # Manager
+    objects = GenericTagManager()
 
 class Photoset(models.Model):
     """Represents a Flickr photoset."""
@@ -54,6 +61,7 @@ class Photo(models.Model):
     rotation_degrees = models.IntegerField(blank=False, null=False, default=0)
     license = models.ForeignKey(License, blank=True, null=True)
     location = models.PointField(blank=True, null=True)
+    tags = TagField(PhotoTag)
     # Permissions
     public_viewable = models.BooleanField(default=False)
     friends_viewable = models.BooleanField(default=False)
@@ -124,7 +132,3 @@ class PhotoNote(models.Model):
     
     def __unicode__(self):
         return self.text
-
-class PhotoTag(GenericTag):
-    flickr_id = models.IntegerField('Flickr ID', blank=False, null=False, unique=True, db_index=True)
-    owner = models.ForeignKey(FlickrUser, blank=False, null=False)
