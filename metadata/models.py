@@ -20,8 +20,5 @@ class License(models.Model):
     # Flickr-specific
     flickr_id = models.IntegerField(blank=True, null=True, editable=False)
     
-    class Admin:
-        pass
-    
     def __unicode__(self):
         return self.title

@@ -1,4 +1,4 @@
-"""Django-admin-related stuff."""
+"""Django-admin-related stuff for the blog application."""
 from django.contrib import admin
 
 from obeattie.blog import models as blog_models

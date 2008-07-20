@@ -1,4 +1,4 @@
-"""Django-admin-related stuff."""
+"""Django-admin-related stuff for the metadata application."""
 from django.contrib import admin
 
 from obeattie.metadata import models as metadata_models
