@@ -1,7 +1,6 @@
-from django.contrib.gis.db import models
+from django.db import models
 
-from obeattie.generic.tagging.fields import TagField
-from obeattie.generic.tagging.models import Tag as GenericTag, TagManager as GenericTagManager
+from obeattie.generic.tagging.models import Tag as GenericTag, TaggedItem as GenericTaggedItem
 from obeattie.metadata.models import License
 
 class FlickrUser(models.Model):
@@ -28,12 +27,6 @@ class FlickrUser(models.Model):
     def __unicode__(self):
         return self.real_name or self.username
 
-class PhotoTag(GenericTag):
-    flickr_id = models.IntegerField('Flickr ID', blank=False, null=False, unique=True, db_index=True)
-    owner = models.ForeignKey(FlickrUser, blank=False, null=False)
-    # Manager
-    objects = GenericTagManager()
-
 class Photoset(models.Model):
     """Represents a Flickr photoset."""
     id = models.IntegerField('Flickr ID', blank=False, null=False, primary_key=True)
@@ -53,15 +46,13 @@ class Photoset(models.Model):
         return self.title
 
 class Photo(models.Model):
-    """Base model representing a Flickr photo."""
+    """Abstract base class representing a Flickr photo."""
     id = models.IntegerField('Flickr ID', blank=False, null=False, primary_key=True)
     # Metadata
     title = models.CharField(max_length=250, blank=False, null=False, db_index=True)
     description = models.TextField(blank=True, null=True)
     rotation_degrees = models.IntegerField(blank=False, null=False, default=0)
     license = models.ForeignKey(License, blank=True, null=True)
-    location = models.PointField(blank=True, null=True)
-    tags = TagField(PhotoTag)
     # Permissions
     public_viewable = models.BooleanField(default=False)
     friends_viewable = models.BooleanField(default=False)
@@ -73,8 +64,6 @@ class Photo(models.Model):
     # Flickr Crap
     flickr_secret = models.CharField(max_length=250, blank=True, null=True, editable=False)
     flickr_original_secret = models.CharField(max_length=250, blank=True, null=True, editable=False)
-    # GeoManager
-    objects = models.GeoManager()
     
     class Admin:
         list_display = ('title', 'description', 'public_viewable', 'posted_timestamp', )
@@ -82,16 +71,22 @@ class Photo(models.Model):
         search_fields = ('title', )
     
     class Meta:
+        abstract = True
         ordering = ('-posted_timestamp', 'title', )
 
 class MyPhoto(Photo):
     """Model for storing photos I own."""
-    pass
+    
+    class Meta(Photo.Meta):
+        abstract = False
 
 class OthersPhoto(Photo):
     """Model for storing photos other Flickr users own."""
     owner = models.ForeignKey(FlickrUser, blank=False, null=False)
     is_favourite = models.BooleanField(default=True)
+    
+    class Meta(Photo.Meta):
+        abstract = False
 
 class PhotoSize(models.Model):
     """Represents a size of a Photo from Flickr."""
@@ -132,3 +127,8 @@ class PhotoNote(models.Model):
     
     def __unicode__(self):
         return self.text
+
+class PhotoTag(GenericTag):
+    flickr_id = models.IntegerField('Flickr ID', blank=False, null=False, unique=True, db_index=True)
+    photo = models.ForeignKey(Photo, blank=False, null=False)
+    owner = models.ForeignKey(FlickrUser, blank=False, null=False)
