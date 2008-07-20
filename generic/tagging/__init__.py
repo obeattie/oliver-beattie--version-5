@@ -1,3 +1,5 @@
+import obeattie.generic.tagging.admin
+
 from django.utils.translation import ugettext as _
 
 from obeattie.generic.tagging.managers import ModelTaggedItemManager, TagDescriptor

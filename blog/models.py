@@ -9,7 +9,7 @@ from obeattie.metadata.models import Category
 
 class Post(models.Model):
     title = models.CharField(max_length=250, blank=False, null=False)
-    slug = models.SlugField(unique=True, blank=True, null=False, prepopulate_from=('title', ))
+    slug = models.SlugField(unique=True, blank=True, null=False)
     # Metadata
     published = models.DateTimeField(blank=False, null=False)
     author = models.ForeignKey(User, blank=False, null=False)
@@ -22,14 +22,5 @@ class Post(models.Model):
     # Manager
     objects = PostManager()
     
-    class Admin:
-        date_hierarchy = 'published'
-        list_display = ('title', 'published', 'is_public', 'author', )
-        list_filter = ('published', 'author', 'is_public', 'categories', )
-        search_fields = ('title', 'slug', 'intro', )
-    
     def __unicode__(self):
         return self.title
-
-class PostAdmin(admin.ModelAdmin):
-    pass

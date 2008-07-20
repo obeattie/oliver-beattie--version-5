@@ -4,12 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 class Category(models.Model):
     """A category with which objects can associate themselves."""
     name = models.CharField(max_length=250, blank=False, null=False)
-    slug = models.SlugField(unique=True, blank=True, null=False, prepopulate_from=('name', ))
+    slug = models.SlugField(unique=True, blank=True, null=False)
     description = models.TextField(blank=False, null=False)
-    
-    class Admin:
-        search_fields = ('name', 'slug', 'description', )
-        list_display = ('name', 'slug', 'description', )
     
     class Meta:
         verbose_name_plural = _(u'categories')

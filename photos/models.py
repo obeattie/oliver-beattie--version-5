@@ -46,7 +46,7 @@ class Photoset(models.Model):
         return self.title
 
 class Photo(models.Model):
-    """Abstract base class representing a Flickr photo."""
+    """Base class representing a Flickr photo."""
     id = models.IntegerField('Flickr ID', blank=False, null=False, primary_key=True)
     # Metadata
     title = models.CharField(max_length=250, blank=False, null=False, db_index=True)
@@ -71,22 +71,16 @@ class Photo(models.Model):
         search_fields = ('title', )
     
     class Meta:
-        abstract = True
         ordering = ('-posted_timestamp', 'title', )
 
 class MyPhoto(Photo):
     """Model for storing photos I own."""
-    
-    class Meta(Photo.Meta):
-        abstract = False
+    pass
 
 class OthersPhoto(Photo):
     """Model for storing photos other Flickr users own."""
     owner = models.ForeignKey(FlickrUser, blank=False, null=False)
     is_favourite = models.BooleanField(default=True)
-    
-    class Meta(Photo.Meta):
-        abstract = False
 
 class PhotoSize(models.Model):
     """Represents a size of a Photo from Flickr."""
