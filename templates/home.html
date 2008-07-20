@@ -1,1 +1,31 @@
 {% extends "base.html" %}
+
+{% block extra_head %}
+    <style type="text/css">
+        /* Styles for the featurette */
+        #featurette {
+            background:#211f1e;
+        }
+        
+        #featurette .container {
+            height:254px;
+            background:url('/media/images/featurettes/welcome-new-digs.png') 50px 20px no-repeat;
+        }
+    </style>
+{% endblock %}
+
+{% block featurette %}
+        <p>Welcome to my new digs.</p>
+{% endblock %}
+
+{% block content %}
+        <div class="span-15">
+            <ol class="posts">
+                <li>
+                    <h1><a href="#">Lorem Ipsum</a></h1>
+                    <p>Lorem ipsum velit epicuri ne mel, has ad malis tollit melius. Maiorum praesent pri at, ex vis adhuc appareat moderatius. Quas simul prompta te vim, regione postulant cum eu, tollit urbanitas reprehendunt ne nec. Ea mea errem dicunt.Mei ad latine maluisset aliquando, ad eam admodum hendrerit efficiendi, quot tamquam ad vis. Eos ad eius ludus, quo an labores delicatissimi. Cum an veri aeque graeco, oblique fabulas delectus ex ius. At alii tation docendi nam, in usu insolens legendos intellegebat. Ius mucius conceptam id.</p>
+                    <a href="#" class="read-on">Continue Readoing&hellip;</a>
+                </li>
+            </ul>
+        </div>
+{% endblock %}

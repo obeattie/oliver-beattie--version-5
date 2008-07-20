@@ -17,8 +17,12 @@
         <h1 class="logo"><a href="http://{{ site.domain }}/">Oliver Beattie</a></h1>
     </div></div>
     
+    <div id="featurette"><div class="container">
+        {% block featurette %}{% endblock %}
+    </div></div>
+    
     <div id="content"><div class="container">
-        <div class=>
+        {% block content %}{% endblock %}
     </div></div>
 </body>
 </html>
