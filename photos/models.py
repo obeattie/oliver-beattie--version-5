@@ -1,11 +1,12 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from obeattie.generic.tagging.models import Tag as GenericTag
 from obeattie.metadata.models import License
 
 class FlickrUser(models.Model):
     """Represents a User on Flickr."""
-    nsid = models.CharField('Flickr NSID', max_length=250, blank=False, null=False, primary_key=True)
+    nsid = models.CharField(_('Flickr NSID'), max_length=250, blank=False, null=False, primary_key=True)
     # Flags
     is_flickr_admin = models.BooleanField(default=False)
     is_pro = models.BooleanField(default=False)
@@ -13,7 +14,7 @@ class FlickrUser(models.Model):
     username = models.CharField(max_length=250, blank=False, null=False, db_index=True)
     real_name = models.CharField(max_length=250, blank=True, null=True, db_index=True)
     location = models.CharField(max_length=250, blank=True, null=True)
-    is_me = models.BooleanField(default=False, help_text='If this user is me, this should be set.')
+    is_me = models.BooleanField(default=False, help_text=_(u'If this user is me, this should be set.'))
     # URLs
     photos_url = models.URLField(blank=False, null=False, verify_exists=False)
     profile_url = models.URLField(blank=False, null=False, verify_exists=False)
@@ -26,12 +27,12 @@ class FlickrUser(models.Model):
 
 class Photoset(models.Model):
     """Represents a Flickr photoset."""
-    id = models.IntegerField('Flickr ID', blank=False, null=False, primary_key=True)
+    id = models.IntegerField(_('Flickr ID'), blank=False, null=False, primary_key=True)
     # Metadata
     title = models.CharField(max_length=250, blank=False, null=False, db_index=True)
     description = models.TextField(blank=True, null=True)
     # Flickry metadata
-    primary_photo_id = models.IntegerField('Primary Photo ID', blank=True, null=True)
+    primary_photo_id = models.IntegerField(_('primary photo ID'), blank=True, null=True)
     flickr_secret = models.CharField(max_length=50, blank=True, null=True)
     flickr_server_farm = models.PositiveIntegerField(blank=False, null=False)
     flickr_server = models.PositiveIntegerField(blank=False, null=False)
@@ -45,16 +46,16 @@ class Photo(models.Model):
     # Metadata
     title = models.CharField(max_length=250, blank=False, null=False, db_index=True)
     description = models.TextField(blank=True, null=True)
-    rotation_degrees = models.IntegerField('Rotation (degrees)', blank=False, null=False, default=0)
+    rotation_degrees = models.IntegerField(_('rotation (degrees)'), blank=False, null=False, default=0)
     license = models.ForeignKey(License, blank=True, null=True)
     # Permissions
-    public_viewable = models.BooleanField('Viewable by the public?', default=False)
-    friends_viewable = models.BooleanField('Viewable by friends?', default=False)
-    family_viewable = models.BooleanField('Viewable by family?', default=False)
+    public_viewable = models.BooleanField(_('publicly-viewable?'), default=False)
+    friends_viewable = models.BooleanField(_('friends-viewable?'), default=False)
+    family_viewable = models.BooleanField(_('family-viewable?'), default=False)
     # Timestamps
-    posted_timestamp = models.DateTimeField('Date posted', blank=False, null=False)
-    taken_timestamp = models.DateTimeField('Date taken', blank=True, null=True) # Not required in case of no date
-    updated_timestamp = models.DateTimeField('Last updated', blank=True, null=True)
+    posted_timestamp = models.DateTimeField(_('date posted'), blank=False, null=False)
+    taken_timestamp = models.DateTimeField(_('date taken'), blank=True, null=True) # Not required in case of an unknown date
+    updated_timestamp = models.DateTimeField(_('last updated'), blank=True, null=True)
     # Flickr Crap
     flickr_secret = models.CharField(max_length=250, blank=True, null=True, editable=False)
     flickr_original_secret = models.CharField(max_length=250, blank=True, null=True, editable=False)
@@ -63,11 +64,11 @@ class Photo(models.Model):
         ordering = ('-posted_timestamp', 'title', )
 
 class MyPhoto(Photo):
-    """Model for storing photos I own."""
+    """Model for storing photos I own. Subclass of Photo :-sD"""
     pass
 
 class OthersPhoto(Photo):
-    """Model for storing photos other Flickr users own."""
+    """Model for storing photos other Flickr users own. Subclass of Photo."""
     owner = models.ForeignKey(FlickrUser, blank=False, null=False)
     is_favourite = models.BooleanField(default=True)
 
@@ -76,21 +77,21 @@ class PhotoSize(models.Model):
     photo = models.ForeignKey(Photo, blank=False, null=False)
     label = models.CharField(max_length=250, blank=False, null=False)
     # Size
-    width = models.PositiveIntegerField(blank=False, null=False, help_text='(In pixels)', editable=False)
-    height = models.PositiveIntegerField(blank=False, null=False, help_text='(In pixels)', editable=False)
+    width = models.PositiveIntegerField(blank=False, null=False, help_text=_(u'(In pixels)'), editable=False)
+    height = models.PositiveIntegerField(blank=False, null=False, help_text=_(u'(In pixels)'), editable=False)
     # URLs and paths
-    location = models.URLField('Location to the image', blank=True, null=True, verify_exists=False)
-    detail_url = models.URLField('Location to a page showing the image', blank=True, null=True, verify_exists=False)
-    local_file = models.ImageField('Image File', blank=True, null=True, width_field='width', height_field='height', upload_to='images/photos')
+    location = models.URLField(_('image location'), blank=True, null=True, verify_exists=False)
+    detail_url = models.URLField(_('flickr page location'), blank=True, null=True, verify_exists=False)
+    local_file = models.ImageField(_('image file'), blank=True, null=True, width_field='width', height_field='height', upload_to='images/photos')
     # Miscellaneous
-    is_flickr = models.BooleanField('Flickr size?', default=False, help_text='Set if the size was generated by Flickr.', editable=False)
+    is_flickr = models.BooleanField(_('flickr size?'), default=False, help_text=_(u'Set if the size was generated by Flickr.'), editable=False)
     
     class Meta:
         unique_together = (('photo', 'label', ), ('photo', 'width', 'height', ), )
 
 class PhotoNote(models.Model):
     """Represents a Note applied to a photo from Flickr."""
-    id = models.IntegerField('Flickr ID', blank=False, null=False, primary_key=True)
+    id = models.IntegerField(_('Flickr ID'), blank=False, null=False, primary_key=True)
     photo = models.ForeignKey(Photo, blank=False, null=False)
     owner = models.ForeignKey(FlickrUser, blank=False, null=False)
     x = models.PositiveIntegerField(blank=False, null=False)
@@ -103,6 +104,6 @@ class PhotoNote(models.Model):
         return self.text
 
 class PhotoTag(GenericTag):
-    flickr_id = models.IntegerField('Flickr ID', blank=False, null=False, unique=True, db_index=True)
+    flickr_id = models.IntegerField(_('Flickr ID'), blank=False, null=False, unique=True, db_index=True)
     photo = models.ForeignKey(Photo, blank=False, null=False)
     owner = models.ForeignKey(FlickrUser, blank=False, null=False)
