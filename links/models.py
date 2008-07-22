@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.encoding import force_unicode
-from django.utils.translation import ugettext_lazy as _
 
 from obeattie.generic.tagging.models import Tag as GenericTag, TagManager as GenericTagManager
 from obeattie.generic.tagging.fields import TagField
