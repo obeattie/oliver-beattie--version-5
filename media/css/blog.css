@@ -1,0 +1,49 @@
+/* ---
+   Oliver Beattie CSS for the Blog Section
+   
+   @author Oliver Beattie
+   @copyright Oliver Beattie 2008
+   --- */
+
+/*
+      ______   ________  __    __  ________  _______   ______   ______  
+     /      \ /        |/  \  /  |/        |/       \ /      | /      \ 
+    /$$$$$$  |$$$$$$$$/ $$  \ $$ |$$$$$$$$/ $$$$$$$  |$$$$$$/ /$$$$$$  |
+    $$ | _$$/ $$ |__    $$$  \$$ |$$ |__    $$ |__$$ |  $$ |  $$ |  $$/ 
+    $$ |/    |$$    |   $$$$  $$ |$$    |   $$    $$<   $$ |  $$ |      
+    $$ |$$$$ |$$$$$/    $$ $$ $$ |$$$$$/    $$$$$$$  |  $$ |  $$ |   __ 
+    $$ \__$$ |$$ |_____ $$ |$$$$ |$$ |_____ $$ |  $$ | _$$ |_ $$ \__/  |
+    $$    $$/ $$       |$$ | $$$ |$$       |$$ |  $$ |/ $$   |$$    $$/ 
+     $$$$$$/  $$$$$$$$/ $$/   $$/ $$$$$$$$/ $$/   $$/ $$$$$$/  $$$$$$/
+*/
+
+ul.posts, ol.posts {
+    list-style:none;
+    margin:0;
+}
+
+.posts h1 {
+    margin-bottom:.3em;
+}
+
+.posts h1 a {
+    text-decoration:underline;
+    color:#c81116;
+}
+
+.posts h1 a:hover {
+    text-decoration:none;
+}
+
+.posts h1 a:active {
+    text-decoration:underline;
+}
+
+a.read-on {
+    display:block;
+    text-indent:-999999px;
+    width:241px;
+    height:16px;
+    background:url('/media/images/miscellaneous/continue-reading.png') center left no-repeat;
+}
+
