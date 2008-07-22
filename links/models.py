@@ -1,14 +1,14 @@
 from django.db import models
 from django.utils.encoding import force_unicode
 
-from obeattie.generic.tagging.models import Tag as GenericTag
+from obeattie.generic.tagging.models import Tag as GenericTag, TagManager as GenericTagManager
 from obeattie.generic.tagging.fields import TagField
 
 class LinkTag(GenericTag):
     """Subclass of Tag (from django_tagging that holds tags specifically for links).
        Being a subclass, the tag is still stored in the global Tag table, as all that is
        stored here is a pointer to the global tag."""
-    pass
+    objects = GenericTagManager()
 
 class Link(models.Model):
     title = models.CharField(max_length=250, blank=False, null=False, db_index=True)
@@ -20,6 +20,9 @@ class Link(models.Model):
     last_modified = models.DateTimeField(blank=True, null=False, auto_now=True, editable=False)
     is_public = models.BooleanField(default=True)
     tags = TagField(blank=True, null=True, model=LinkTag)
+    
+    def __unicode__(self):
+        return self.title
     
     @property
     def modified(self):
