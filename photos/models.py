@@ -1,6 +1,6 @@
 from django.db import models
 
-from obeattie.generic.tagging.models import Tag as GenericTag, TaggedItem as GenericTaggedItem
+from obeattie.generic.tagging.models import Tag as GenericTag
 from obeattie.metadata.models import License
 
 class FlickrUser(models.Model):
