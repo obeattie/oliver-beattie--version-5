@@ -1,10 +1,14 @@
 """Miscellaneous Flickr views."""
 from django.http import HttpResponseRedirect
 
-BASE_AUTH_URL = u'http://flickr.com/services/auth/'
+from obeattie.miscellaneous.utils.requests import check_key
+from obeattie.photos.flickr.requests import authentication
 
 def begin_authorization(request, permissions='delete'):
     """Redirects to the Flickr authorization page."""
-    url = BASE_AUTH_URL
-    
-    return HttpResponseRedirect()
+    return HttpResponseRedirect(authentication.build_authentication_url(permissions=permissions))
+
+def complete_authorization(request):
+    """Completes the authorization with Flickr, and displays the resulting
+       data."""
+    check_key(request.GET, 'frob')

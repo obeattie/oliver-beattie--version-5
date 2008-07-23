@@ -1,4 +1,4 @@
-"""Flickr request classes."""
+"""Flickr request classes. Provides a base for all of the request methods."""
 import hashlib
 
 from django.conf import settings
@@ -31,10 +31,24 @@ class FlickrParameters(SortedDict):
         }).hexdigest()
     
     def urlencode(self):
-        """Returns the urlencoded result of the parameters, ready to append as a query
-           string."""
+        """Returns the urlencoded result of the parameters, ready to append in a query
+           string or similar."""
         parameters = SortedDict()
         for param in self.sorted_items():
             parameters[param[0]] = param[1]
         parameters['api_sig'] = self.hashed()
         return urlencode(parameters)
+
+class FlickrRequest(object):
+    """An abstract base class which encapsulates a request to be made to the Flickr API."""
+    method = None
+    
+    def __init__(self, params, *args, **kwargs):
+        # Enforce the abstract baseyness :)
+        assert not isinstance(self, FlickrRequest)
+        # If params is not yet FlickrParameters, make them so
+        if not isinstance(params, FlickrParameters):
+            params = FlickrParameters(params)
+        # ...now store the params
+        self.params = params
+        return super(FlickrRequest, self).__init__(*args, **kwargs)

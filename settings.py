@@ -97,6 +97,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'obeattie.miscellaneous.context_processors.site',
 )
 
+# Flickr settings
+FLICKR_API_KEY = 'fd9e8e7cb2601c11b2040c859986cc3c'
+FLICKR_API_SECRET = 'a73987d3935a25f4'
+
 # Local settings
 try:
     from obeattie.local_settings import *
