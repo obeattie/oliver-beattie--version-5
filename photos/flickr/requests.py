@@ -6,7 +6,7 @@ from django.utils.datastructures import SortedDict
 from django.utils.http import urlencode
 
 class FlickrParameters(SortedDict):
-    """Subclass of the builtin dict type which helps in generating
+    """A SortedDict subclass which helps in generating
        the parameters to pass in a Flickr request."""
     def __init__(self, data={}, *args, **kwargs):
         data.update({ 'api_key': settings.FLICKR_API_KEY })
