@@ -8,6 +8,6 @@ def build_authentication_url(permissions='delete'):
     assert permissions in ('read', 'write', 'delete', )
     return u'http://www.flickr.com/services/auth/?%s' % base.FlickrParameters({ 'perms': permissions }).urlencode()
 
-class getToken(base.FlickrJSONRequest):
+class GetToken(base.FlickrJSONRequest):
     method = 'flickr.auth.getToken'
     required_params = ['frob', ]

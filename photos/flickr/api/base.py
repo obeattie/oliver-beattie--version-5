@@ -116,7 +116,7 @@ class FlickrRequest(object):
     forced_params = {}
     required_params = ['method', ]
     excluded_params = set() # Keys are unique
-    valid_params = []
+    optional_params = []
     pagination_params = {} # Should have the keys 'page_key' and 'paginate_by_key', and optionally 'max_per_page'
     
     def __init__(self, params, excluded_params=[], *args, **kwargs):
@@ -151,7 +151,7 @@ class FlickrRequest(object):
     def get_valid_params(self):
         params = set()
         params.update(self.required_params)
-        params.update(self.valid_params)
+        params.update(self.optional_params)
         params.update(self.forced_params.keys())
         params.update(self.default_params.keys())
         params.update([i for i in [self.pagination_params.get('page_key', None), self.pagination_params.get('paginate_by_key', None)] if i])
