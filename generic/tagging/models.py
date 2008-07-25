@@ -28,6 +28,30 @@ except ImportError:
 ############
 
 class TagManager(models.Manager):
+    def create(self, **kwargs):
+        if not Tag in self.model.__bases__ or 'tag_ptr' in kwargs:
+            return super(TagManager, self).create(**kwargs)
+        else:
+            # This is a subclassed model
+            try:
+                return super(TagManager, self).create(**kwargs)
+            except IntegrityError:
+                # A tag exists in the global tag table, but not in the local table.
+                global_tag = Tag.objects.get(**kwargs)
+                return super(TagManager, self).create(tag_ptr=global_tag, **kwargs)
+    
+    def get_or_create(self, **kwargs):
+        if not Tag in self.model.__bases__ or 'tag_ptr' in kwargs:
+            return super(TagManager, self).get_or_create(**kwargs)
+        else:
+            # This is a subclassed model
+            try:
+                return super(TagManager, self).get_or_create(**kwargs)
+            except self.model.DoesNotExist:
+                # A tag exists in the global tag table, but not in the local table.
+                global_tag = Tag.objects.get(**kwargs)
+                return (self.model.objects.create(tag_ptr=global_tag, **kwargs), True)
+    
     def update_tags(self, obj, tag_names):
         """
         Update tags associated with an object.

@@ -3,7 +3,7 @@ Custom managers for Django models registered with the tagging
 application.
 """
 from django.contrib.contenttypes.models import ContentType
-from django.db import models
+from django.db import IntegrityError, models
 
 from obeattie.generic.tagging.models import Tag, TaggedItem
 
