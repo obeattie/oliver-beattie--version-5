@@ -118,16 +118,6 @@ a.reverse:active { text-decoration:none; }
        $$/        $$/     $$/        $$$$$$/   $$$$$$/  $$/   $$/ $$/   $$/ $$/       $$/   $$/     $$/
     
 */
-body {
-    font-family:'Helvetica', 'Lucida Grande';
-    line-height:1.9;
-}
-
-h1 {
-    text-transform:uppercase;
-    font-family:'P22 Underground Pro', 'P22 Underground', 'Johnston', 'ITC Johnston', 'Gill Sans', sans-serif;
-    letter-spacing:.13em;
-}
 
 /*
      __    __  ________   ______   _______   ________  _______  
@@ -141,27 +131,6 @@ h1 {
     $$/   $$/ $$$$$$$$/ $$/   $$/ $$$$$$$/  $$$$$$$$/ $$/   $$/
     
 */
-#header {
-    display:block;
-    min-width:100%;
-}
-
-/* The header height also has to apply to its container */
-#header, #header .container {
-    height:70px;
-}
-
-#header h1.logo a {
-    display:block;
-    width:227px;
-    height:20px;
-    padding:25px 5px 5px 0;
-    background:url('/media/images/backgrounds/name-masthead.png') 0 25px no-repeat;
-    text-indent:-999999px;
-}
-
-/* -- FEATURETTES -- */
-#featurette .container  * { display:none; }
 
 /*
       ______    ______   __    __  ________  ________  __    __  ________ 
@@ -175,7 +144,3 @@ h1 {
      $$$$$$/   $$$$$$/  $$/   $$/    $$/    $$$$$$$$/ $$/   $$/    $$/
     
 */
-#content {
-    margin-top:5em;
-}
-
