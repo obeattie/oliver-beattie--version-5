@@ -22,6 +22,6 @@ DATABASE_NAME = os.path.join(DIRNAME, 'tagging_test.db')
 
 INSTALLED_APPS = (
     'django.contrib.contenttypes',
-    'tagging',
-    'tagging.tests',
+    'obeattie.generic.tagging',
+    'obeattie.generic.tagging.tests',
 )

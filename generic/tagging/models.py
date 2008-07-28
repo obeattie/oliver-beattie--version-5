@@ -5,7 +5,7 @@ Models and managers for generic tagging.
 if not hasattr(__builtins__, 'set'):
     from sets import Set as set
 
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes import generic as django_generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import connection, models
 from django.db.models.query import QuerySet
@@ -501,10 +501,10 @@ class TaggedItem(models.Model):
     """
     Holds the relationship between a tag and the item being tagged.
     """
-    tag          = models.ForeignKey(Tag, verbose_name=_('tag'), related_name='items')
+    tag = models.ForeignKey(Tag, verbose_name=_('tag'), related_name='items')
     content_type = models.ForeignKey(ContentType, verbose_name=_('content type'))
-    object_id    = models.PositiveIntegerField(_('object id'), db_index=True)
-    object       = generic.GenericForeignKey('content_type', 'object_id')
+    object_id = models.PositiveIntegerField(_('object id'), db_index=True)
+    object = django_generic.GenericForeignKey('content_type', 'object_id')
 
     objects = TaggedItemManager()
 

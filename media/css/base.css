@@ -21,9 +21,7 @@
     $$$$$$/ $$/      $$/ $$/        $$$$$$/  $$/   $$/    $$/    $$$$$$/
     
 */
-@import url('blueprint/screen.css'); /* Blueprint CSS Framework */
-@import url('blueprint/plugins/fancy-type/screen.css');
-@import url('blog.css');
+@import url('./blog.css');
 
 /*
       ______   __         ______   _______    ______   __               ______   __    __  ______  ________ 
