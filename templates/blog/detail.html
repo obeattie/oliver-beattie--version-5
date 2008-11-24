@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+{% load markup %}
+
+{% block title %}{{ block.super }} / {{ post.title }}{% endblock %}
+{% block body_class %}{{ block.super}} {{ post.slug }}{% endblock %}
+
+{% block content %}
+        <div class="post-heading span-24">
+            <h1 class="sifr didot">{{ post.title }}</h1>
+            <div class="post-summary">{{ post.intro|markdown }}</div>
+        </div>
+        
+        <div class="post-meta span-3">
+            <p>Posted {{ post.published|timesince }} ago.</p>
+        </div>
+        
+        <div class="post-content span-18">
+            {{ post.body|markdown }}
+        </div>
+        
+        <hr class="hide" />
+{% endblock %}
