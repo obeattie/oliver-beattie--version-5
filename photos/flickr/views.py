@@ -15,7 +15,7 @@ def complete_authorization(request):
     """Completes the authorization with Flickr, and displays the resulting
        data."""
     check_key(request.GET, 'frob')
-    request = authentication.GetToken({
+    token_request = authentication.GetToken({
         'frob': request.GET['frob'],
     })
-    return HttpResponse(unicode(request.send().decoded))
+    return HttpResponse(unicode(token_request.send().decoded))

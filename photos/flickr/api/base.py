@@ -20,12 +20,7 @@ class FlickrParameters(SortedDict):
     def sorted_items(self):
         """Sorts self.items() in ascending order and then returns the result."""
         def item_compare(x, y):
-            if x[0] > y[0]:
-                return 1
-            elif x[0] == y[0]:
-                return 0
-            else:
-                return -1
+            return cmp(x[0], y[0])
         
         return sorted(self.items(), item_compare)
     
@@ -39,8 +34,7 @@ class FlickrParameters(SortedDict):
         """Returns the urlencoded result of the parameters, ready to append in a query
            string or similar."""
         parameters = SortedDict()
-        for param in self.sorted_items():
-            parameters[param[0]] = param[1]
+        parameters.update(self.sorted_items())
         parameters['api_sig'] = self.hashed()
         return urlencode(parameters)
 

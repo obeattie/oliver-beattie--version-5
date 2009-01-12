@@ -1,1 +1,2 @@
-# Create your views here.
+"""Views for the links application."""
+from obeattie.links.models import Link
