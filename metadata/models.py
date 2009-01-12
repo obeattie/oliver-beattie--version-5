@@ -10,7 +10,7 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = _(u'categories')
     
-    def __unicode___(self):
+    def __unicode__(self):
         return self.name
 
 class License(models.Model):

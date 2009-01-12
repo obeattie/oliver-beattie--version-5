@@ -177,7 +177,7 @@ class FlickrRequest(object):
         return self._response
     
     def get_paginator(self):
-        retrurn pagination.FlickrAPIPaginator(request=self)
+        return pagination.FlickrAPIPaginator(request=self)
     
     @property
     def response(self):

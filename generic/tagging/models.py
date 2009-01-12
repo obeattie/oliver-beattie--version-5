@@ -5,7 +5,7 @@ Models and managers for generic tagging.
 if not hasattr(__builtins__, 'set'):
     from sets import Set as set
 
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes import generic as django_generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import connection, models
 from django.db.models.query import QuerySet
@@ -28,6 +28,30 @@ except ImportError:
 ############
 
 class TagManager(models.Manager):
+    def create(self, **kwargs):
+        if not Tag in self.model.__bases__ or 'tag_ptr' in kwargs:
+            return super(TagManager, self).create(**kwargs)
+        else:
+            # This is a subclassed model
+            try:
+                return super(TagManager, self).create(**kwargs)
+            except IntegrityError:
+                # A tag exists in the global tag table, but not in the local table.
+                global_tag = Tag.objects.get(**kwargs)
+                return super(TagManager, self).create(tag_ptr=global_tag, **kwargs)
+    
+    def get_or_create(self, **kwargs):
+        if not Tag in self.model.__bases__ or 'tag_ptr' in kwargs:
+            return super(TagManager, self).get_or_create(**kwargs)
+        else:
+            # This is a subclassed model
+            try:
+                return super(TagManager, self).get_or_create(**kwargs)
+            except self.model.DoesNotExist:
+                # A tag exists in the global tag table, but not in the local table.
+                global_tag = Tag.objects.get(**kwargs)
+                return (self.model.objects.create(tag_ptr=global_tag, **kwargs), True)
+    
     def update_tags(self, obj, tag_names):
         """
         Update tags associated with an object.
@@ -477,10 +501,10 @@ class TaggedItem(models.Model):
     """
     Holds the relationship between a tag and the item being tagged.
     """
-    tag          = models.ForeignKey(Tag, verbose_name=_('tag'), related_name='items')
-    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'))
-    object_id    = models.PositiveIntegerField(_('object id'), db_index=True)
-    object       = generic.GenericForeignKey('content_type', 'object_id')
+    tag = models.ForeignKey(Tag, verbose_name='tag', related_name='items')
+    content_type = models.ForeignKey(ContentType, verbose_name='content type')
+    object_id = models.PositiveIntegerField(_('object id'), db_index=True)
+    object = django_generic.GenericForeignKey('content_type', 'object_id')
 
     objects = TaggedItemManager()
 

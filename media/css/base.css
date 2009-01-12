@@ -21,9 +21,7 @@
     $$$$$$/ $$/      $$/ $$/        $$$$$$/  $$/   $$/    $$/    $$$$$$/
     
 */
-@import url('blueprint/screen.css'); /* Blueprint CSS Framework */
-@import url('blueprint/plugins/fancy-type/screen.css');
-@import url('blog.css');
+@import url('./blog.css');
 
 /*
       ______   __         ______   _______    ______   __               ______   __    __  ______  ________ 
@@ -118,16 +116,10 @@ a.reverse:active { text-decoration:none; }
        $$/        $$/     $$/        $$$$$$/   $$$$$$/  $$/   $$/ $$/   $$/ $$/       $$/   $$/     $$/
     
 */
-body {
-    font-family:'Helvetica', 'Lucida Grande';
-    line-height:1.9;
-}
-
-h1 {
-    text-transform:uppercase;
-    font-family:'P22 Underground Pro', 'P22 Underground', 'Johnston', 'ITC Johnston', 'Gill Sans', sans-serif;
-    letter-spacing:.13em;
-}
+html body { font-family:Georgia, Garamond, Times, serif; font-size:.85em; line-height:2.3em; }
+p + p { margin-top:1.6em !important; }
+em { color:#783c10; }
+h1.didot { font-family:'HTFDidot-L42LightItalic', 'HTF Didot', 'Didot-Italic', 'Didot', serif; font-size:50px; font-style:italic; }
 
 /*
      __    __  ________   ______   _______   ________  _______  
@@ -141,27 +133,6 @@ h1 {
     $$/   $$/ $$$$$$$$/ $$/   $$/ $$$$$$$/  $$$$$$$$/ $$/   $$/
     
 */
-#header {
-    display:block;
-    min-width:100%;
-}
-
-/* The header height also has to apply to its container */
-#header, #header .container {
-    height:70px;
-}
-
-#header h1.logo a {
-    display:block;
-    width:227px;
-    height:20px;
-    padding:25px 5px 5px 0;
-    background:url('/media/images/backgrounds/name-masthead.png') 0 25px no-repeat;
-    text-indent:-999999px;
-}
-
-/* -- FEATURETTES -- */
-#featurette .container  * { display:none; }
 
 /*
       ______    ______   __    __  ________  ________  __    __  ________ 
@@ -175,7 +146,3 @@ h1 {
      $$$$$$/   $$$$$$/  $$/   $$/    $$/    $$$$$$$$/ $$/   $$/    $$/
     
 */
-#content {
-    margin-top:5em;
-}
-

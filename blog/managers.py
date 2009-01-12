@@ -5,7 +5,6 @@ from django.db import models
 
 class PostManager(models.Manager):
     """Manager for posts."""
-    
     def get_public(self):
         """The public Post objects."""
         return self.model.objects.filter(is_public=True)

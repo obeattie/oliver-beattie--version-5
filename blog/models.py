@@ -29,3 +29,12 @@ class Post(models.Model):
     
     def __unicode__(self):
         return self.title
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('obeattie.blog.views.post_detail', (), {
+            'year': self.published.year,
+            'month': self.published.strftime('%b').lower(),
+            'day': self.published.day,
+            'slug': self.slug,
+        })
